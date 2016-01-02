@@ -1,0 +1,257 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /hello:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  
+  
+  /version:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: version
+    get:
+      description: Returns current app version
+      # used as the method name of the controller
+      operationId: getVersionInfo
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/VersionResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  
+  
+  
+  
+  /user:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    post:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: createUser
+      parameters:
+        - name: user
+          in: body
+          description: The name of user
+          required: true
+          schema:
+            $ref: "#/definitions/createUserRequestBody"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: getUserList
+      parameters:
+        - name: userId
+          in: query
+          description: UserId of listed user (only returns one user)
+          required: false
+          type: string
+        - name: userName
+          in: query
+          description: The name of user
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  
+  
+  
+  /message:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: message
+    post:
+      description: Creates message with given variables
+      # used as the method name of the controller
+      operationId: createMessage
+      parameters:
+        - name: message
+          in: body
+          description: Message variables
+          required: true
+          schema:
+            $ref: "#/definitions/createMessageRequestBody"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Returns all messages on given center point and radius
+      # used as the method name of the controller
+      operationId: listMessageByRadius
+      parameters:
+        - name: latitude
+          in: query
+          description: Latitude of the center point
+          required: true
+          type: string
+        - name: longitude
+          in: query
+          description: Longitude of the center point
+          required: true
+          type: string
+        - name: radius
+          in: query
+          description: radius (in meters)
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  /testMessages:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: message
+    get:
+      description: Returns all messages on given center point and radius
+      # used as the method name of the controller
+      operationId: listAllMessages
+      parameters:
+        - name: userId
+          in: query
+          description: UserId of listed user (only returns one user)
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  createUserRequestBody:
+    required:
+      - userName
+      - userPassword
+      - userEmail
+    properties:
+      userName:
+        type: string
+      userPassword:
+        type: string
+      userEmail:
+        type: string
+  createMessageRequestBody:
+    required:
+      - userName
+      - message
+      - latitude
+      - longitude
+    properties:
+      userName:
+        type: string
+      message:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+  VersionResponse:
+    required:
+      - version
+    properties:
+      version:
+        type: string
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: object
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
