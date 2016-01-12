@@ -53,11 +53,15 @@ function getUserList(req, res) {
 
     else if(req.swagger.params.userName.value){
        var name = req.swagger.params.userName.value;
-        connection.query('select * from haydadb.users where nickname like \'%?%\'', name, function(err, rows, fields) {
+
+
+        connection.query( "select * from haydadb.users where nickname like ?", '%' + name + '%', function(err, rows, fields) {
             if (!err)
                 res.json(rows);
-            else
+            else {
+                console.log(err);
                 res.json('no user found with matching name');
+            }
         });
     }
 

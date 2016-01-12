@@ -13,8 +13,6 @@ var connection = mysql.createConnection({
     multipleStatements: true
 });
 
-
-
 connection.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
