@@ -26,7 +26,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
     next();
   });
 
-  app.all('/api/*', [require('./api/helpers/validateRequest')]);
+ app.all('/api/*', [require('./api/helpers/validateRequest')]);
   // install middleware
   swaggerExpress.register(app);
 

@@ -76,6 +76,36 @@ paths:
           description: The name of the person to whom to say hello
           required: true
           type: string
+          
+  /auth:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth
+    get:
+      description: Authenticate User
+      # used as the method name of the controller
+      operationId: authenticateUser
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/AuthResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      parameters:
+        - name: email
+          in: query
+          description: email of the user
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: password for user
+          required: true
+          type: string
   
   
   
@@ -261,6 +291,15 @@ definitions:
     properties:
       message:
         type: object
+  AuthResponse:
+    required:
+      - token
+      - expires
+    properties:
+      token:
+        type: string
+      expires:
+        type: string
   ErrorResponse:
     required:
       - message
