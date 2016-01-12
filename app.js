@@ -16,15 +16,15 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
   // Add headers
 
-  app.use(function (req, res, next) {
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,X-Access-Token,X-Key,Accept');
-    next();
-  });
+  //app.use(function (req, res, next) {
+  //  // Website you wish to allow to connect
+  //  res.setHeader('Access-Control-Allow-Origin', '*');
+  //  // Request methods you wish to allow
+  //  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  //  // Request headers you wish to allow
+  //  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,x-access-token,x-key,Accept');
+  //  next();
+  //});
 
  app.all('/api/*', [require('./api/helpers/validateRequest')]);
   // install middleware

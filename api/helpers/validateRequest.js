@@ -23,10 +23,23 @@ module.exports = function(req, res, next) {
         next();
         return;
     }
+    if(pathname == '/api/version') {
+        next();
+        return;
+    }
 
     //var testToken =  req.swagger.headers;
     var token = (req.body && req.body.access_token) || (req.query && req.query['x-access-token']) || req.headers['x-access-token'];
     var key = (req.body && req.body.x_key) || (req.query && req.query['x-key']) || req.headers['x-key'];
+
+    if (key == undefined){
+        res.status(401);
+        res.json({
+            "status": 401,
+            "message": "Invalid credentials"
+        });
+        return;
+    }
 
     var dbUser = dbConnection.query('select * from haydadb.users where email = ?',key, function(err, rows, fields) {
         if (!err && rows.length > 0) {

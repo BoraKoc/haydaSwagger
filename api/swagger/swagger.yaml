@@ -63,19 +63,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-      parameters:
-        - name: x-access-token
-          in: query
-          description: The name of the person to whom to say hello
-          default: bora_anani_yiyolar_yeee_yeee
-          required: true
-          type: string
-        - name: x-key
-          in: query
-          default: haydatest@hayda.com
-          description: The name of the person to whom to say hello
-          required: true
-          type: string
+
           
   /auth:
     # binds a127 app logic to a route
