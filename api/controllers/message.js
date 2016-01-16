@@ -44,7 +44,7 @@ function createMessage(req, res) {
 function listMessageByRadius(req, res) {
 
     var values  = {user_id: req.swagger.params.userId, source: req.swagger.params.text, latitude: req.swagger.params.latitude, longitute : req.swagger.params.longitute };
-    connection.query( 'CALL haydadb.Get_Message_By_Distance('+req.params.longitude+','+ req.params.latitude+','+req.params.distance+');', function(err, rows, fields){
+    connection.query( 'CALL haydadb.Get_Message_By_Distance('+req.swagger.params.longitude.value+','+ req.swagger.params.latitude.value+','+req.swagger.params.radius.value+');', function(err, rows, fields){
         if (!err)
             res.json(rows);
         else
