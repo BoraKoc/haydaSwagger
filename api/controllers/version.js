@@ -14,28 +14,22 @@ var connection = mysql.createConnection({
     multipleStatements: true
 });
 
-
-
 connection.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
         return;
     }});
 
-module.exports = {
-    getVersionInfo: getVersionInfo
-};
-
-
 function getVersionInfo(req, res) {
-
     connection.query('select * from haydadb.version', function(err, rows, fields) {
         if (!err) {
-
             res.json(rows);
         }
         else
             res.json('Error while performing Query.');
     });
-
 }
+
+module.exports = {
+    getVersionInfo: getVersionInfo
+};

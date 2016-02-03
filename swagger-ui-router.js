@@ -30,7 +30,6 @@ module.exports = function docsRouter(app) {
     });
 
     // serve the static assets for swagger ui
-
     app.use(SWAGGER_UI_PATH, serveStatic(SWAGGER_UI_FILES));
 
 };

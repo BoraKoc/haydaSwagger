@@ -4,9 +4,9 @@ info:
   title: Hello World App
 # during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
+# basePath prefixes all resource paths
 basePath: /api
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -18,33 +18,6 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
-    get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  
-  
-  
   /version:
     # binds a127 app logic to a route
     x-swagger-router-controller: version
@@ -64,7 +37,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-          
+
   /auth:
     # binds a127 app logic to a route
     x-swagger-router-controller: auth
@@ -94,21 +67,21 @@ paths:
           description: password for user
           required: true
           type: string
-  
-  
-  
-  
-  /user:
+
+
+
+
+  /user/create:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
     post:
-      description: Returns 'Hello' to the caller
+      description: Create new user
       # used as the method name of the controller
       operationId: createUser
       parameters:
         - name: user
           in: body
-          description: The name of user
+          description: User information
           required: true
           schema:
             $ref: "#/definitions/createUserRequestBody"
@@ -117,14 +90,18 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/StandartResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
+  /user/list:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
     get:
-      description: Returns 'Hello' to the caller
+      description: List Users
       # used as the method name of the controller
       operationId: getUserList
       parameters:
@@ -143,21 +120,21 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/StandartResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  
-  
-  
-  
-  /message:
+
+
+
+
+  /message/create:
     # binds a127 app logic to a route
     x-swagger-router-controller: message
     post:
-      description: Creates message with given variables
+      description: Creates message
       # used as the method name of the controller
       operationId: createMessage
       parameters:
@@ -172,12 +149,16 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/StandartResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
+  /message/list:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: message
     get:
       description: Returns all messages on given center point and radius
       # used as the method name of the controller
@@ -203,24 +184,24 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/StandartResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  
-  /testMessages:
+
+  /message/byUser:
     # binds a127 app logic to a route
     x-swagger-router-controller: message
     get:
-      description: Returns all messages on given center point and radius
+      description: Get all messages from an user
       # used as the method name of the controller
       operationId: listAllMessages
       parameters:
-        - name: userId
+        - name: userName
           in: query
-          description: UserId of listed user (only returns one user)
+          description: UserName of listed user (only returns one user)
           required: false
           type: string
       responses:
@@ -228,14 +209,14 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/StandartResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  
-  
+
+
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -273,7 +254,7 @@ definitions:
     properties:
       version:
         type: string
-  HelloWorldResponse:
+  StandartResponse:
     required:
       - message
     properties:

@@ -19,25 +19,30 @@ connection.connect(function(err) {
         return;
     }});
 
-module.exports = {
-    listMessageByRadius: listMessageByRadius,
-    createMessage: createMessage,
-    listAllMessages: listAllMessages
-};
-
 function createMessage(req, res) {
 
-    var values  = {user_id: req.body.userId, text: req.body.message, latitude: req.body.latitude, longitute : req.body.longitute };
+    var queryValues  = { user_name: req.body.userName,
+                         text: req.body.message,
+                         latitude: req.body.latitude,
+                         longitude : req.body.longitude };
 
-    var query = connection.query('insert into haydadb.messages SET ?',values, function(err, rows, fields) {
-        if (!err)
-            res.json(rows);
+    var messageQuery = connection.query('insert into haydadb.messages SET ?',queryValues, function(err, rows, fields) {
+        if (!err) {
+            queryValues = {nickname : req.body.userName};
+            var countIncreaseQuery = connection.query('update haydadb.users set message_count = message_count + 1 where ?',queryValues, function(err, rows, fields) {
+                if (!err)
+                    res.json(req.body.userName + " created a new message");
+                else {
+                    console.log(countIncreaseQuery.sql);
+                    res.json('Error while performing mesage count increase query.');
+                }
+            });
+        }
         else {
-            console.log(query.sql);
-            res.json('Error while performing Query.');
+            console.log(messageQuery.sql);
+            res.json('Error while performing create message query.');
         }
     });
-
 }
 
 
@@ -56,7 +61,7 @@ function listMessageByRadius(req, res) {
 function listAllMessages(req, res) {
 
     if(req.swagger.params.userId.value){
-        connection.query('select * from haydadb.messages where user_id = ?',req.swagger.params.userId, function(err, rows, fields) {
+        connection.query('select * from haydadb.messages where user_name = ?',req.swagger.params.userId, function(err, rows, fields) {
             if (!err)
                 res.json(rows);
             else
@@ -70,9 +75,12 @@ function listAllMessages(req, res) {
                 res.json('Error while performing Query.');
         });
     }
-
-
 }
 
+module.exports = {
+    listMessageByRadius: listMessageByRadius,
+    createMessage: createMessage,
+    listAllMessages: listAllMessages
+};
 
 
