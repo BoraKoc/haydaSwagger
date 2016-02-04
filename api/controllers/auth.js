@@ -30,8 +30,6 @@ function authenticateUser(req, res) {
     var password = req.swagger.params.password.value;
     connection.query('select * from haydadb.users where email = ? and password = ?', [email, password], function (err, rows, fields) {
         if (!err && rows.length > 0) {
-
-
             var generatedToken = genToken(rows[0].name);
             res.json({token : generatedToken.token.toString(), expires:generatedToken.expires.toString()});
         }

@@ -21,10 +21,28 @@ connection.connect(function(err) {
 
 function createMessage(req, res) {
 
-    var queryValues  = { user_name: req.body.userName,
-                         text: req.body.message,
-                         latitude: req.body.latitude,
-                         longitude : req.body.longitude };
+    var queryValues = { user_name : req.body.userName,
+                        user_id : req.body.user_id,
+                        text: req.body.message,
+                        latitude: req.body.latitude,
+                        longitude : req.body.longitude,
+                        create_date : new Date() };
+
+    var limitParameters = { user_name : req.body.userName};
+    var messageLimitQuery = connection.query('select count(*) as count from haydadb.messages where create_date >= now()-INTERVAL 1 DAY and ?'
+                            , limitParameters, function(err, rows, fields){
+        if(!err){
+            var messageCount = row[0]['count'];
+            if(messageCount > 25){
+                res.status(500);
+                res.json('Too many messages from this user in last 24 hours.');
+                return;
+            }
+        }else{
+            res.json('Error while performing message count increase query.');
+        }
+    });
+
 
     var messageQuery = connection.query('insert into haydadb.messages SET ?',queryValues, function(err, rows, fields) {
         if (!err) {
@@ -48,7 +66,10 @@ function createMessage(req, res) {
 
 function listMessageByRadius(req, res) {
 
-    var values  = {user_id: req.swagger.params.userId, source: req.swagger.params.text, latitude: req.swagger.params.latitude, longitute : req.swagger.params.longitute };
+    var values  = {user_id:    req.swagger.params.userId,
+                   source:     req.swagger.params.text,
+                   latitude:   req.swagger.params.latitude,
+                   longitute : req.swagger.params.longitute };
     connection.query( 'CALL haydadb.Get_Message_By_Distance('+req.swagger.params.longitude.value+','+ req.swagger.params.latitude.value+','+req.swagger.params.radius.value+');', function(err, rows, fields){
         if (!err)
             res.json(rows);
